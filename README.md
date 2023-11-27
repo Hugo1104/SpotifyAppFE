@@ -1,1 +1,1 @@
-# This is the spotify project
+# This is the Spotify project
