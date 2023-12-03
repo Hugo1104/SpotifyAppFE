@@ -7,12 +7,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.laioffer.spotify.network.NetworkApi
-import com.laioffer.spotify.network.NetworkModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var api: NetworkApi
 
     private val TAG = "lifecycle"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            val retrofit = NetworkModule.provideRetrofit()
-            val api = retrofit.create(NetworkApi::class.java)
 
             val response = api.getHomeFeed().execute().body()
             Log.d(TAG, response.toString())
