@@ -1,5 +1,6 @@
 package com.laioffer.spotify.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,14 +33,14 @@ import com.laioffer.spotify.datamodel.Section
 
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: HomeViewModel, onTap: (Album) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
 
-    HomeScreenContent(uiState = uiState)
+    HomeScreenContent(uiState = uiState, onTap = onTap)
 }
 
 @Composable
-fun HomeScreenContent(uiState: HomeUiState) {
+fun HomeScreenContent(uiState: HomeUiState, onTap: (Album) -> Unit) {
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         item {
             HomeScreenHeader()
@@ -54,14 +55,16 @@ fun HomeScreenContent(uiState: HomeUiState) {
             }
             else -> {
                 items(uiState.feed) { item ->
-                    AlbumSection(section = item)
+                    AlbumSection(section = item, onTap = onTap)
                 }
             }
         }
+
+
     }
 }
 @Composable
-private fun AlbumSection(section: Section) {
+private fun AlbumSection(section: Section, onTap: (Album) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,7 +80,7 @@ private fun AlbumSection(section: Section) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(section.albums) { item ->
-                AlbumCover(item)
+                AlbumCover(item, onTap)
             }
         }
 
@@ -85,8 +88,8 @@ private fun AlbumSection(section: Section) {
 }
 
 @Composable
-private fun AlbumCover(album: Album) {
-    Column {
+private fun AlbumCover(album: Album, onTap: (Album) -> Unit) {
+    Column(modifier = Modifier.clickable { onTap(album) }) {
         Box(modifier = Modifier.size(160.dp)) {
             AsyncImage(
                 model = album.cover,
