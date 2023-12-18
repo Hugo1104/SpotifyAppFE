@@ -45,6 +45,7 @@ fun PlaylistScreen(playlistViewModel: PlaylistViewModel) {
         playlistUiState = playlistUiState,
         onTapFavorite = {
             Log.d("PlaylistScreen", "Tap favorite $it")
+            playlistViewModel.toggleFavorite(it)
         }
     )
 
@@ -206,6 +207,3 @@ private fun Cover(
         )
     }
 }
-
-
-
